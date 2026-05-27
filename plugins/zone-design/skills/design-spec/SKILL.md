@@ -6,28 +6,22 @@ description: Use when a Zone PM or designer starts shaping a new feature, screen
 # Zone Design Spec
 
 ## Overview
-Layer Zone's design strategy onto superpowers to produce two artifacts: a **design
-specification** and a ready-to-paste **Claude Design prompt**. Orchestrate only — do not
-reimplement brainstorming.
+A front-end for superpowers. This skill **collects** the project context and **loads** Zone's
+design strategy plus the two output templates, packs them into a single **design brief**, then
+**hands off to superpowers** — which takes over and drives the work to two deliverables: a
+**design specification** and a ready-to-paste **Claude Design prompt**.
 
-**REQUIRED SUB-SKILL:** superpowers:brainstorming is the conversation engine.
-**Visual identity (color, type, tokens) lives in Claude Design — never restate it.**
-
-**This skill stays in charge the whole way.** Use brainstorming only as the Q&A engine. When
-it tries to end by invoking `/superpowers:writing-plans`, that is overridden — control returns
-here and the workflow ends at step 7 (spec + Claude Design prompt, no plan). design-spec, not
-brainstorming, owns the written artifacts and the ending.
+**superpowers is in charge once you hand off.** This skill only prepares the brief — it does
+not drive the outcome, retain control, or override superpowers' flow.
 
 ## Workflow
 
-Announce: "Using the Zone design-spec skill."
+Announce: "Using the Zone design-spec skill to prepare your design brief."
 
-1. **Load context.** Read all three `references/` files (design strategy, spec template,
-   prompt template) before asking anything.
-2. **Confirm save location.** Write to the user's own location, never this repo. Default
-   `./docs/superpowers/{specs,prompts}`; if not in a project directory, fall back to
-   `~/zone-design-specs/<slug>/`. Confirm first; create `plans/` and `roadmap/` only on demand.
-3. **Intake — one question at a time.** Open: "I'll ask a few short questions one at a time —
+1. **Load Zone context.** Read all three `references/` files — `design-strategy.md`,
+   `design-spec-template.md`, `claude-design-prompt-template.md`. Their content goes into the
+   brief.
+2. **Intake — one question at a time.** Open: "I'll ask a few short questions one at a time —
    paste a link, file path, or text for each, or type **skip**. The more you share, the less
    I'll ask later." Ask these in order, one by one, waiting for each answer (never dump the
    list); accept **skip** for any:
@@ -44,31 +38,27 @@ Announce: "Using the Zone design-spec skill."
 
    Ingest each item as it's given (Atlassian MCP = Jira/Confluence, Google Drive MCP =
    Docs/Slides, Figma MCP = Figma, WebFetch = public URLs, Read = local files/images). Save
-   screenshots to `specs/screenshots/`. Pre-fill the spec; flag skips/gaps as open questions
-   rather than stalling. Then summarize captured-vs-missing.
-4. **Brainstorm with Zone lenses (you stay in charge).** Invoke `/superpowers:brainstorming`
-   as the conversation engine, and state the goal to it up front: *we are producing a Zone
-   design specification, then a Claude Design prompt — not code, not an implementation plan.*
-   Add the questions the stock flow omits: which of the 4 Core Values / 4 Interface Principles
-   apply, the finance persona/job, design-system implications (Ant / ZIN UI Kit, gaps), every
-   state (empty/loading/error/success), and UI copy against the voice rules. **Tell the user to
-   say yes when brainstorming offers the Visual Companion** — its mockups and diagrams help
-   shape the prototype. **When the design is agreed, do NOT follow brainstorming's hand-off to
-   `/superpowers:writing-plans`** — return here and continue at step 5.
-5. **Write the spec** to `specs/` from `design-spec-template.md`: fill the header, tag open
-   questions (🚦/🧭/💼/✅), map acceptance criteria.
-6. **Generate the Claude Design prompt automatically** once the spec is approved, to `prompts/`
-   from `claude-design-prompt-template.md`. Self-review: map each spec section to a prompt
-   section; confirm no color/type restated, out-of-scope mirrors the spec, named states match.
-   Extending an existing prototype → use the follow-up prompt pattern.
-7. **Stop.** Hand over the spec + prompt; point to `/superpowers:writing-plans` for a plan. Do
-   not write the plan here.
+   screenshots to `docs/superpowers/specs/screenshots/`. Summarize captured-vs-missing.
+3. **Assemble the design brief.** Build ONE prompt that contains:
+   - the **Zone design strategy** — the lens (4 Core Values, 4 Interface Principles, Ant / ZIN
+     UI Kit, voice rules) and the rule that **visual identity (color/type/tokens) lives in
+     Claude Design and must never be restated**;
+   - the **design-spec template** and the **Claude Design prompt template** verbatim, as the
+     required output formats;
+   - everything captured in intake (ingested content summarized, with links/paths);
+   - the **deliverables**: (1) a design specification using the spec template, then (2) a
+     Claude Design prompt using the prompt template — written to `docs/superpowers/{specs,
+     prompts}/` in the user's project. These are the outcome **in place of the usual
+     writing-plans step**; not code, not an implementation plan.
+4. **Hand off to superpowers.** Invoke `/superpowers:using-superpowers` and give it the
+   assembled brief as the task. **From here, superpowers drives** — let it run brainstorming
+   and produce the two deliverables. Do not micromanage, override, or take control back. Tell
+   the user to say **yes** when brainstorming offers the **Visual Companion** — its mockups and
+   diagrams help shape the prototype.
 
-## Red flags — STOP
-- Restating colors, fonts, or tokens → they live in Claude Design.
-- Writing outputs into this plugin repo → they go to the user's location.
-- Skipping intake or asking cold mid-brainstorm → run intake first.
-- Following brainstorming's hand-off to `/superpowers:writing-plans` → override it; design-spec
-  ends at step 7 with the spec + Claude Design prompt.
-- Producing the implementation plan here → that's `/superpowers:writing-plans` (only if the user
-  explicitly asks, after you've stopped).
+## The brief must carry
+- The two deliverables (design spec + Claude Design prompt) and where they're saved — stated as
+  replacing the writing-plans step.
+- The "never restate visual identity — it lives in Claude Design" rule.
+- The Zone lens: 4 Core Values, 4 Interface Principles, Ant / ZIN UI Kit, voice rules.
+- All ingested context, with links/paths.
