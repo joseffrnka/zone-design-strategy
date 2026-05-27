@@ -11,6 +11,7 @@ it). In Claude Code:
 ```
 /plugin marketplace add anthropics/claude-plugins-official
 /plugin install superpowers
+/reload-plugins
 ```
 Check with `/plugin` → installed; if `superpowers` is listed, you're set.
 
@@ -22,11 +23,12 @@ In Claude Code:
    ```
    /plugin marketplace add joseffrnka/zone-design-strategy
    ```
-2. Install the plugin:
+2. Install the plugin and reload:
    ```
    /plugin install zone-design
+   /reload-plugins
    ```
-3. Restart Claude Code if prompted.
+3. `/zone-design:design-spec` should now be available. Restart Claude Code only if it isn't.
 
 ## Use
 

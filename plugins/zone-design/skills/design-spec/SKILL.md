@@ -23,21 +23,27 @@ Announce: "Using the Zone design-spec skill."
    repo. Default to `./docs/superpowers/{specs,prompts}` in the current directory; if not in
    a project directory, fall back to `~/zone-design-specs/<slug>/`. Confirm before writing.
    Create `plans/` and `roadmap/` only on demand.
-3. **Guided intake.** Open with: "Before we design, let's gather what you've already got.
-   Share whatever exists — links, files, screenshots. Anything you don't have, just say
-   'skip' and we'll treat it as an open question." Then ask (gather-and-proceed — never
-   block):
-   - Project name + tracker ID (Jira design ticket)?
-   - Functional design doc? Technical design doc? PRD / user stories / acceptance criteria?
-     Other context (research, Gong, Slack, prior decisions)?
+3. **Guided intake — ONE question at a time.** Open with: "Before we design, let's gather
+   what you've already got. I'll ask a few short questions one at a time — paste a link, a
+   file path, or text for each, or type **skip** to move on. The more you share, the less I'll
+   ask later." Then ask the questions below **one by one**, waiting for the user's answer
+   before asking the next. Never dump the whole list at once. Let the user paste context or
+   links per question; accept **skip** for any. Order:
+   - Project name + tracker ID (the Jira design ticket)?
    - In 1–2 sentences: what are we building, for which finance persona/job? What does success
      look like?
-   - Which existing screens does this touch? Figma links for them? Screenshots of the current
-     screens? POC / competitor / inspiration references?
-   **Ingest what's provided** using available tools (Atlassian MCP for Jira/Confluence,
-   Google Drive MCP for Docs/Slides, Figma MCP for Figma, WebFetch for public URLs, Read for
-   local files/images). Save screenshots into `specs/screenshots/`. Pre-fill the spec from
-   what you ingest rather than re-asking. Summarize captured-vs-missing.
+   - Functional design doc?
+   - Technical design doc?
+   - PRD / user stories / acceptance criteria?
+   - Other context — research, Gong calls, Slack threads, prior decisions?
+   - Which existing screens does this touch? Figma links for them?
+   - Screenshots of the current screens?
+   - Any POC, competitor, or inspiration references?
+   **Ingest each item as it's provided** using available tools (Atlassian MCP for
+   Jira/Confluence, Google Drive MCP for Docs/Slides, Figma MCP for Figma, WebFetch for public
+   URLs, Read for local files/images). Save screenshots into `specs/screenshots/`. Pre-fill the
+   spec from what you ingest; flag skipped/missing items as open questions rather than
+   stalling. After the questions, summarize captured-vs-missing.
 4. **Brainstorm with Zone lenses.** Invoke `/superpowers:using-superpowers`, which routes into
    `/superpowers:brainstorming`. Inject Zone-specific questions the stock flow omits: which of
    the 4 Core Values / 4 Interface Principles apply, the target finance persona/job, design-
