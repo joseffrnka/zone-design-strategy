@@ -2,7 +2,17 @@
 
 Turn a feature idea into a Zone **design specification** + a ready-to-paste **Claude Design
 prompt**, grounded in Zone's design strategy. Built on top of
-[superpowers](https://github.com/obra/superpowers) (installed automatically).
+[superpowers](https://github.com/obra/superpowers).
+
+## Prerequisite: superpowers
+
+This plugin uses superpowers as its engine, so install that first (most people already have
+it). In Claude Code:
+```
+/plugin marketplace add anthropics/claude-plugins-official
+/plugin install superpowers
+```
+Check with `/plugin` → installed; if `superpowers` is listed, you're set.
 
 ## Install (one time)
 
@@ -12,7 +22,7 @@ In Claude Code:
    ```
    /plugin marketplace add joseffrnka/zone-design-strategy
    ```
-2. Install the plugin (superpowers comes along automatically as a dependency):
+2. Install the plugin:
    ```
    /plugin install zone-design
    ```

@@ -6,6 +6,5 @@
     "name": "Josef Frnka",
     "email": "joseffrnka@zoneandco.com"
   },
-  "keywords": ["design", "ux", "zone", "claude-design", "product"],
-  "dependencies": ["superpowers"]
+  "keywords": ["design", "ux", "zone", "claude-design", "product"]
 }
