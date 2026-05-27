@@ -4,16 +4,12 @@
     "name": "Josef Frnka",
     "email": "joseffrnka@zoneandco.com"
   },
+  "allowCrossMarketplaceDependenciesOn": ["claude-plugins-official"],
   "plugins": [
     {
       "name": "zone-design",
       "source": "./plugins/zone-design",
-      "description": "Zone design-strategy layer on superpowers: produces a design spec + a Claude Design prompt."
-    },
-    {
-      "name": "superpowers",
-      "source": { "source": "github", "repo": "obra/superpowers" },
-      "description": "Core skills library (brainstorming, writing-plans, TDD). Dependency of zone-design."
+      "description": "Zone design-strategy layer on superpowers: produces a design spec + a Claude Design prompt. Depends on superpowers (auto-resolved)."
     }
   ]
 }
