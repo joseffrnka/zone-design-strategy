@@ -45,24 +45,29 @@ Announce: "Using the Zone design-spec skill to prepare your design brief."
    carries a short args string, and a fresh/subagent context won't have your loaded references —
    a local path survives the handoff and beats GitHub links (no network/auth, no version drift,
    no public exposure of finance content).* The brief must contain, in this order:
-   a. **The two deliverables and their save paths** — (1) a design spec at
+   a. **A mandatory-brainstorming instruction** — superpowers MUST run
+      `/superpowers:brainstorming` first and never skip it. Intake "skip" answers skip only that
+      one intake question, never the brainstorming phase. Do not fabricate context or jump
+      straight to the deliverables.
+   b. **The two deliverables and their save paths** — (1) a design spec at
       `docs/superpowers/specs/<topic>-design.md` using the spec template, then (2) a Claude
       Design prompt at `docs/superpowers/prompts/<topic>-claude-design-prompt.md` using the
       prompt template — stated as **replacing the usual writing-plans step** (not code, not a
       plan).
-   b. **`design-strategy.md` inlined verbatim** — the Zone lens; it carries the 4 Core Values,
+   c. **`design-strategy.md` inlined verbatim** — the Zone lens; it carries the 4 Core Values,
       4 Interface Principles, Ant / ZIN UI Kit, voice rules, and the "never restate visual
       identity" rule. It is the single source of truth — don't re-list these separately.
-   c. **`design-spec-template.md` and `claude-design-prompt-template.md` inlined verbatim** — the
+   d. **`design-spec-template.md` and `claude-design-prompt-template.md` inlined verbatim** — the
       required output formats.
-   d. **All ingested intake context**, with links/paths (screenshots under
+   e. **All ingested intake context**, with links/paths (screenshots under
       `docs/superpowers/specs/screenshots/`).
 4. **Hand off to superpowers — the brief's absolute path is mandatory.** Invoke
    `/superpowers:using-superpowers`; the handoff string MUST point it to the brief and tell it
    to read it first. Use the **absolute** path so it resolves from any context, e.g.:
    > "Read the full design brief at `<abs-path>/docs/superpowers/<topic>-brief.md` — it contains
-   > the Zone design strategy, both output templates verbatim, and all ingested context. Produce
-   > the two deliverables it specifies, in place of the writing-plans step."
+   > the Zone design strategy, both output templates verbatim, and all ingested context. Run
+   > brainstorming first (do NOT skip it — any skipped intake questions become open questions),
+   > then produce the two deliverables it specifies, in place of the writing-plans step."
 
    **From here, superpowers drives** — let it run brainstorming and produce the two deliverables.
    Do not micromanage, override, or take control back. Tell the user to say **yes** when
@@ -70,6 +75,8 @@ Announce: "Using the Zone design-spec skill to prepare your design brief."
    prototype.
 
 ## The brief (`docs/superpowers/<topic>-brief.md`) must carry
+- A **mandatory-brainstorming instruction**: superpowers runs `/superpowers:brainstorming` first
+  and never skips it; "skip" applies only to a single intake question, never the phase.
 - The two deliverables (design spec + Claude Design prompt) and their save paths — stated as
   replacing the writing-plans step.
 - `design-strategy.md` inlined verbatim (the Zone lens + "never restate visual identity" rule —
