@@ -7,9 +7,9 @@ description: Use when a Zone PM or designer starts shaping a new feature, screen
 
 ## Overview
 A front-end for superpowers. This skill **collects** the project context and **loads** Zone's
-design strategy plus the two output templates, packs them into a single **design brief**, then
-**hands off to superpowers** — which takes over and drives the work to two deliverables: a
-**design specification** and a ready-to-paste **Claude Design prompt**.
+design strategy plus the two output templates, writes them into a single **design brief file**,
+then **hands off to superpowers by path** — which takes over and drives the work to two
+deliverables: a **design specification** and a ready-to-paste **Claude Design prompt**.
 
 **superpowers is in charge once you hand off.** This skill only prepares the brief — it does
 not drive the outcome, retain control, or override superpowers' flow.
@@ -39,26 +39,42 @@ Announce: "Using the Zone design-spec skill to prepare your design brief."
    Ingest each item as it's given (Atlassian MCP = Jira/Confluence, Google Drive MCP =
    Docs/Slides, Figma MCP = Figma, WebFetch = public URLs, Read = local files/images). Save
    screenshots to `docs/superpowers/specs/screenshots/`. Summarize captured-vs-missing.
-3. **Assemble the design brief.** Build ONE prompt that contains:
-   - the **Zone design strategy** — the lens (4 Core Values, 4 Interface Principles, Ant / ZIN
-     UI Kit, voice rules) and the rule that **visual identity (color/type/tokens) lives in
-     Claude Design and must never be restated**;
-   - the **design-spec template** and the **Claude Design prompt template** verbatim, as the
-     required output formats;
-   - everything captured in intake (ingested content summarized, with links/paths);
-   - the **deliverables**: (1) a design specification using the spec template, then (2) a
-     Claude Design prompt using the prompt template — written to `docs/superpowers/{specs,
-     prompts}/` in the user's project. These are the outcome **in place of the usual
-     writing-plans step**; not code, not an implementation plan.
-4. **Hand off to superpowers.** Invoke `/superpowers:using-superpowers` and give it the
-   assembled brief as the task. **From here, superpowers drives** — let it run brainstorming
-   and produce the two deliverables. Do not micromanage, override, or take control back. Tell
-   the user to say **yes** when brainstorming offers the **Visual Companion** — its mockups and
-   diagrams help shape the prototype.
+3. **Write the design brief to a FILE.** Do not build an in-message prompt. Write the brief to
+   `docs/superpowers/<topic>-brief.md` in the user's project (create `docs/superpowers/` if
+   missing; `<topic>` = a short slug from the project name). *Why a file: the Skill tool only
+   carries a short args string, and a fresh/subagent context won't have your loaded references —
+   a local path survives the handoff and beats GitHub links (no network/auth, no version drift,
+   no public exposure of finance content).* The brief must contain, in this order:
+   a. **The two deliverables and their save paths** — (1) a design spec at
+      `docs/superpowers/specs/<topic>-design.md` using the spec template, then (2) a Claude
+      Design prompt at `docs/superpowers/prompts/<topic>-claude-design-prompt.md` using the
+      prompt template — stated as **replacing the usual writing-plans step** (not code, not a
+      plan).
+   b. **`design-strategy.md` inlined verbatim** — the Zone lens; it carries the 4 Core Values,
+      4 Interface Principles, Ant / ZIN UI Kit, voice rules, and the "never restate visual
+      identity" rule. It is the single source of truth — don't re-list these separately.
+   c. **`design-spec-template.md` and `claude-design-prompt-template.md` inlined verbatim** — the
+      required output formats.
+   d. **All ingested intake context**, with links/paths (screenshots under
+      `docs/superpowers/specs/screenshots/`).
+4. **Hand off to superpowers — the brief's absolute path is mandatory.** Invoke
+   `/superpowers:using-superpowers`; the handoff string MUST point it to the brief and tell it
+   to read it first. Use the **absolute** path so it resolves from any context, e.g.:
+   > "Read the full design brief at `<abs-path>/docs/superpowers/<topic>-brief.md` — it contains
+   > the Zone design strategy, both output templates verbatim, and all ingested context. Produce
+   > the two deliverables it specifies, in place of the writing-plans step."
 
-## The brief must carry
-- The two deliverables (design spec + Claude Design prompt) and where they're saved — stated as
+   **From here, superpowers drives** — let it run brainstorming and produce the two deliverables.
+   Do not micromanage, override, or take control back. Tell the user to say **yes** when
+   brainstorming offers the **Visual Companion** — its mockups and diagrams help shape the
+   prototype.
+
+## The brief (`docs/superpowers/<topic>-brief.md`) must carry
+- The two deliverables (design spec + Claude Design prompt) and their save paths — stated as
   replacing the writing-plans step.
-- The "never restate visual identity — it lives in Claude Design" rule.
-- The Zone lens: 4 Core Values, 4 Interface Principles, Ant / ZIN UI Kit, voice rules.
-- All ingested context, with links/paths.
+- `design-strategy.md` inlined verbatim (the Zone lens + "never restate visual identity" rule —
+  the single source of truth for the 4 Values, 4 Principles, Ant / ZIN UI Kit, voice rules).
+- `design-spec-template.md` and `claude-design-prompt-template.md` inlined verbatim.
+- All ingested intake context, with links/paths.
+
+Its **absolute path** is a required part of the step-4 handoff string.
