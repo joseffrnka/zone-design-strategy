@@ -41,6 +41,10 @@ The skill will gather your inputs (docs, Figma links, screenshots), walk you thr
 design-strategy-informed brainstorm, then write a design spec and a Claude Design prompt into
 **your** chosen location (defaults to `./docs/superpowers/` in the current directory).
 
+> **Important:** during the brainstorm you'll be asked whether to enable the **Visual
+> Companion** for this session — **say yes**. It renders mockups and diagrams that help shape
+> the prototype.
+
 ## Updating the design strategy
 
 The design strategy lives in

@@ -49,6 +49,9 @@ Announce: "Using the Zone design-spec skill."
    the 4 Core Values / 4 Interface Principles apply, the target finance persona/job, design-
    system implications (Ant / ZIN UI Kit components, gaps), every state (empty/loading/error/
    success), and UI copy against the voice rules. With intake done, mostly confirm.
+   **IMPORTANT:** brainstorming will ask whether to enable the **Visual Companion** for this
+   session — tell the user to say **yes**. It renders mockups and diagrams that directly help
+   shape the prototype.
 5. **Write the design spec** to `specs/` using `references/design-spec-template.md`. Fill the
    header, tag open questions (🚦/🧭/💼/✅), and map acceptance criteria.
 6. **Generate the Claude Design prompt automatically** once the spec is approved. Write it to
