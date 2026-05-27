@@ -1,0 +1,19 @@
+{
+  "name": "zone-design-strategy",
+  "owner": {
+    "name": "Josef Frnka",
+    "email": "joseffrnka@zoneandco.com"
+  },
+  "plugins": [
+    {
+      "name": "zone-design",
+      "source": "./plugins/zone-design",
+      "description": "Zone design-strategy layer on superpowers: produces a design spec + a Claude Design prompt."
+    },
+    {
+      "name": "superpowers",
+      "source": { "source": "github", "repo": "obra/superpowers" },
+      "description": "Core skills library (brainstorming, writing-plans, TDD). Dependency of zone-design."
+    }
+  ]
+}
