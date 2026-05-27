@@ -13,6 +13,7 @@ it). In Claude Code:
 /plugin install superpowers
 /reload-plugins
 ```
+**When prompted for a scope, choose "you" (user scope)** so it's available in every project.
 Check with `/plugin` → installed; if `superpowers` is listed, you're set.
 
 ## Install (one time)
@@ -28,6 +29,8 @@ In Claude Code:
    /plugin install zone-design
    /reload-plugins
    ```
+   **When prompted for a scope, choose "you" (user scope)** — same as superpowers — so the skill
+   works in every project, not just the current folder.
 3. `/zone-design:design-spec` should now be available. Restart Claude Code only if it isn't.
 
 ## Use
