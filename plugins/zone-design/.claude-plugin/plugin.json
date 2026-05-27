@@ -1,7 +1,7 @@
 {
   "name": "zone-design",
   "description": "Zone design-strategy layer on superpowers. Turns a feature idea into a Zone design specification and a ready-to-paste Claude Design prompt.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Josef Frnka",
     "email": "joseffrnka@zoneandco.com"
