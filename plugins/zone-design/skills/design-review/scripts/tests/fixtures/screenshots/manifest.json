@@ -1,0 +1,22 @@
+[
+  {
+    "label": "landing",
+    "file": "01-landing.png",
+    "hash": "8551459d192951b9f1e0ce0d584feb74ce6a446ddd4579d811a5ffe4b87ed999"
+  },
+  {
+    "label": "Landing",
+    "file": "02-landing.png",
+    "hash": "f66b5f66c4cd9db3d4e70d3b72d3263375ec0dd10b2033868f29b94e6842e4ff"
+  },
+  {
+    "label": "Dashboard",
+    "file": "03-dashboard.png",
+    "hash": "3034a178f166d94da0e695c0f7c7d812245ce92f72b98fcf5d308567007eee48"
+  },
+  {
+    "label": "Settings",
+    "file": "04-settings.png",
+    "hash": "1837763c54c76a5fe1f2890fafa0e461fcd9ee51b9274e91dce56d3bb9b12ca1"
+  }
+]
