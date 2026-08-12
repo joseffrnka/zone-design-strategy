@@ -7,6 +7,9 @@ export const meta = {
 
 // `args` arrives JSON-encoded as a string in this environment rather than already parsed —
 // parse defensively so the rest of the script can use it as an object either way.
+// Everything below this line must read from `params`, never `args` — `args` stays in scope
+// as the original (possibly-string) value, and a stray `args.foo` silently evaluates to
+// `undefined` instead of throwing, since strings auto-box in JS.
 const params = typeof args === 'string' ? JSON.parse(args) : args
 
 const CRITIC_SCHEMA = {
