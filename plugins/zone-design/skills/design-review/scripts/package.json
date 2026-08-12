@@ -1,0 +1,12 @@
+{
+  "name": "zone-design-review-capture",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "node --test tests/"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
