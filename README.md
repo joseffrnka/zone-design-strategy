@@ -55,11 +55,9 @@ In any project (or any folder), run:
 /zone-design:design-review
 ```
 
-One-time setup for this skill's screenshot pipeline:
-```
-cd plugins/zone-design/skills/design-review/scripts && npm install && npx playwright install chromium
-```
-(Run this once per machine — the plugin's own `scripts/` folder, not your project.)
+The screenshot pipeline (Playwright + Chromium) installs itself into the plugin's own directory
+the first time it's needed, wherever that is on your machine — you don't need to find or `cd`
+into it yourself. That install happens once per machine, not once per project.
 
 The skill will ask for a Claude Design project link and the file(s) to review, pull the source,
 render and screenshot every screen it can find, run a blind 4-critic panel against the design

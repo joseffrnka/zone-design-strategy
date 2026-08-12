@@ -17,6 +17,12 @@ becomes a proposed `design-strategy.md`/`rubric.md` edit for Josef to approve.
 
 Announce: "Using the Zone design-review skill to critique this prototype."
 
+Resolve `<skill-dir>` once, up front: the absolute path of the directory containing this
+SKILL.md file. Use `<skill-dir>` for every `scripts/` reference below — never a bare relative
+`scripts/...` or `cd scripts`. The shell's working directory is not guaranteed to be this
+skill's own directory, and won't be at all when this skill runs from an installed plugin rather
+than a checkout of its source repo.
+
 ### 1. Load context
 Read, in full:
 - `../design-spec/references/design-strategy.md` (the rubric's lens — read from `design-spec`,
@@ -58,17 +64,30 @@ Using `DesignSync`:
 5. Resolve the token reference: `list_files` for a `_ds/` prefix in the same project; if any
    exist, `get_file` and pull those too. If none exist, use the Figma MCP
    (`mcp__claude_ai_Figma__get_variable_defs` or `get_design_context`) against the Zone ZIN UI
-   Kit file key `hm0cTxC2h13Hv3RgdpOEek` instead. Note which source was used — it goes in the
-   artifact's callout in step 6.
+   Kit file key `hm0cTxC2h13Hv3RgdpOEek` instead. If that also fails or is unreachable, don't
+   guess at values — set `tokenReference` to the literal string
+   `"unverified — no token reference available"` and carry that into step 5. Note which source
+   was used (project `_ds/`, Figma ZIN kit, or unverified) — it goes in the artifact's callout in
+   step 6.
 
 ### 4. Capture screenshots
-Run the capture script against the temp directory (one-time setup if `node_modules` is missing:
-`cd scripts && npm install && npx playwright install chromium`):
+Run the capture script against the temp directory. Auto-detection runs cold — intake step 2's
+list (if any) is only used afterward to check for gaps, never to restrict what gets captured:
 ```
-node scripts/capture.mjs --entry <temp-dir>/<main-file> --out <run-dir>/screenshots --screens "<comma-separated names from intake step 2, if given>"
+node <skill-dir>/scripts/capture.mjs --entry <temp-dir>/<main-file> --out <run-dir>/screenshots
 ```
+(One-time setup if `<skill-dir>/scripts/node_modules` is missing: `cd <skill-dir>/scripts &&
+npm install && npx playwright install chromium`.)
+
 Read `<run-dir>/screenshots/manifest.json`. Present the captured list (and anything that errored)
-to Josef; ask him to confirm the set or name any screen/state that's missing before continuing.
+to Josef; compare it against any screens/states he named at intake and flag anything missing.
+There's no manual-capture fallback beyond what `capture.mjs`'s detection selectors find — if
+something he named genuinely isn't there, note the gap in the artifact's callout (step 6) and
+fall back to source-only critique for that screen/state, the same as a render failure.
+
+If a prior review run was given at intake, `Read` `<prior-path>/screenshots/manifest.json` now
+— its entries become `priorRun` in step 5.
+
 If a screen failed to render, note it — that screen falls back to source-only critique in the
 panel and gets flagged in the artifact's callout, never treated as a blocker for the whole run.
 
@@ -78,12 +97,14 @@ Build the `args` object for `Workflow`:
   `{key, persona}` entries (persona = the shared framing section + that critic's own section).
 - `rubric`: the full text of `references/rubric.md`.
 - `tokenReference`: the pulled `_ds/` files' content, or the Figma variable/style dump.
-- `screens`: one entry per captured screen — `{name, screenshotPath, sourcePaths}`.
-- `priorRun`: the prior run's manifest, if one was given at intake; otherwise `null`.
+- `screens`: one entry per captured screen — `{name, screenshotPath, sourcePaths, hash}` (`hash`
+  comes straight from that screen's own entry in this run's `manifest.json`).
+- `priorRun`: the prior run's manifest (loaded in step 4), if one was given at intake; otherwise
+  `null`.
 
 Invoke:
 ```
-Workflow({ scriptPath: "<abs-path>/scripts/critic-panel.workflow.js", args: <the object above> })
+Workflow({ scriptPath: "<skill-dir>/scripts/critic-panel.workflow.js", args: <the object above> })
 ```
 It returns `{ critics: {craft, ux, tokens, opportunity}, reconciled }`.
 
