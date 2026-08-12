@@ -36,54 +36,57 @@ async function main() {
   await mkdir(args.out, { recursive: true })
 
   const browser = await chromium.launch()
-  const page = await browser.newPage({
-    viewport: { width: Number(args.width), height: Number(args.height) },
-  })
+  try {
+    const page = await browser.newPage({
+      viewport: { width: Number(args.width), height: Number(args.height) },
+    })
 
-  const entryUrl = pathToFileURL(path.resolve(args.entry)).href
-  await page.goto(entryUrl, { waitUntil: 'load' })
+    const entryUrl = pathToFileURL(path.resolve(args.entry)).href
+    await page.goto(entryUrl, { waitUntil: 'load' })
 
-  const manifest = []
-  const seenHashes = new Set()
+    const manifest = []
+    const seenHashes = new Set()
 
-  async function capture(label) {
-    const buf = await page.screenshot({ fullPage: true })
-    const hash = hashBuffer(buf)
-    if (seenHashes.has(hash)) {
-      return { label, skipped: true, reason: 'byte-identical to a prior capture' }
+    async function capture(label) {
+      const buf = await page.screenshot({ fullPage: true })
+      const hash = hashBuffer(buf)
+      if (seenHashes.has(hash)) {
+        return { label, skipped: true, reason: 'byte-identical to a prior capture' }
+      }
+      seenHashes.add(hash)
+      const filename = `${String(manifest.length + 1).padStart(2, '0')}-${slugify(label)}.png`
+      await writeFile(path.join(args.out, filename), buf)
+      return { label, file: filename, hash }
     }
-    seenHashes.add(hash)
-    const filename = `${String(manifest.length + 1).padStart(2, '0')}-${slugify(label)}.png`
-    await writeFile(path.join(args.out, filename), buf)
-    return { label, file: filename, hash }
-  }
 
-  manifest.push(await capture('landing'))
+    manifest.push(await capture('landing'))
 
-  const candidates = await detectScreens(page)
-  const requested = args.screens ? args.screens.split(',').map((s) => s.trim()) : null
+    const candidates = await detectScreens(page)
+    const requested = args.screens ? args.screens.split(',').map((s) => s.trim()) : null
 
-  for (const candidate of candidates) {
-    if (requested && !requested.includes(candidate.label)) continue
-    try {
-      await page.click(candidate.selector, { timeout: 2000 })
-      await page.waitForTimeout(150)
-      manifest.push(await capture(candidate.label))
-    } catch (err) {
-      manifest.push({ label: candidate.label, error: String((err && err.message) || err) })
+    for (const candidate of candidates) {
+      if (requested && !requested.includes(candidate.label)) continue
+      try {
+        await page.click(candidate.selector, { timeout: 2000 })
+        await page.waitForTimeout(150)
+        manifest.push(await capture(candidate.label))
+      } catch (err) {
+        manifest.push({ label: candidate.label, error: String((err && err.message) || err) })
+      }
     }
+
+    await writeFile(path.join(args.out, 'manifest.json'), JSON.stringify(manifest, null, 2))
+
+    const failed = manifest.filter((m) => m.error)
+    console.log(
+      `Captured ${manifest.filter((m) => m.file).length} screen(s), ${failed.length} failed, ${
+        manifest.filter((m) => m.skipped).length
+      } skipped as duplicates.`
+    )
+    if (failed.length) console.log('Failed:', failed.map((f) => f.label).join(', '))
+  } finally {
+    await browser.close()
   }
-
-  await writeFile(path.join(args.out, 'manifest.json'), JSON.stringify(manifest, null, 2))
-  await browser.close()
-
-  const failed = manifest.filter((m) => m.error)
-  console.log(
-    `Captured ${manifest.filter((m) => m.file).length} screen(s), ${failed.length} failed, ${
-      manifest.filter((m) => m.skipped).length
-    } skipped as duplicates.`
-  )
-  if (failed.length) console.log('Failed:', failed.map((f) => f.label).join(', '))
 }
 
 main().catch((err) => {
