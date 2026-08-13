@@ -87,6 +87,11 @@ If a prior audit run was given at intake, `Read` `<prior-path>/findings.json` no
 If a screen failed to render, note it — that screen falls back to source-only audit in the panel
 and gets flagged in the artifact's callout, never treated as a blocker for the whole run.
 
+Either fallback case (failed to render, or named at intake but never detected) still needs an
+entry in step 5's `screens` list, not an omission: give it a `name`, leave `screenshotPath` unset,
+and set `sourcePaths` from the file(s) pulled into `<temp-dir>` in step 3 that are relevant to it.
+That's how it reaches the panel as a source-only entry instead of silently dropping out.
+
 ### 5. Run the audit panel
 Build the `args` object for `Workflow`:
 - `skillDir`: `<skill-dir>` (absolute path) — lets each Audit-phase agent `Read` its own assigned
@@ -94,7 +99,9 @@ Build the `args` object for `Workflow`:
 - `checklistIndex`: the full text of `references/checklist-index.md`.
 - `checklistAuditMode`: the full text of `references/checklist-audit-mode.md`.
 - `uxCritiqueFramework`: the full text of `references/ux-critique-framework.md`.
-- `screens`: one entry per captured screen — `{name, screenshotPath, sourcePaths}`.
+- `screens`: one entry per screen in scope, captured or fallback — `{name, screenshotPath,
+  sourcePaths}`. Include the fallback entries built in step 4 (`screenshotPath` unset) alongside
+  the captured ones; don't drop a screen from this list just because it has no screenshot.
 - `priorRun`: `{failedItems: [...]}` loaded in step 4, if a prior run was given at intake;
   otherwise `null`.
 
@@ -115,6 +122,14 @@ checks) no screenshot can confirm; a delta section (`diff.stillFailing` / `diff.
 `diff.fixedSinceLastRun`) if a prior run was given at intake; a footer. Publish it with the
 `Artifact` tool (favicon: 📋) every run — this is not optional or on-request.
 
+`merged.byScreen` may include an `"all screens"` key — findings the panel judged uniform across
+every screen (e.g. nav consistency, the typography scale). Don't force these into any one screen's
+plate: render them as their own cross-cutting section (same table shape: checklist source, item,
+status, why it matters, fix), placed above the per-screen plates. A screen whose entry has no
+`screenshotPath` (the source-only fallback from step 4) still gets its own plate — just with no
+screenshot, only its failed-items table — consistent with the callout noting it as a source-only
+fallback.
+
 Also write `<run-dir>/findings.json`:
 ```json
 { "failedItems": /* Object.values(merged.byScreen).flat() */ }
@@ -129,8 +144,10 @@ is a re-audit.
 Fill `references/claude-design-remediation-template.md` into `<run-dir>/remediation-prompt.md`:
 one "Fixes to make" entry per `merged.byScreen` item (already ranked by the panel's severity
 heuristic — accessibility items first, then missing, then partially-present, then can't-tell),
-grouped by screen. "Can't-tell" items go in their own section, not mixed into "Fixes to make" —
-they're gaps in what this audit could verify, not confirmed defects.
+grouped by screen. Give any `"all screens"` items (see step 6) their own "Cross-cutting fixes"
+heading instead of folding them under one screen's name. "Can't-tell" items go in their own
+section, not mixed into "Fixes to make" — they're gaps in what this audit could verify, not
+confirmed defects.
 
 ### 8. Update the shared log; propose a promotion if one is due
 Append this run's confirmed findings to `design-audit-log.md` (see its header for the row format;
