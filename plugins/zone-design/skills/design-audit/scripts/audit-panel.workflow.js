@@ -58,7 +58,9 @@ function screenBlock(screens) {
   return screens
     .map(
       (s) =>
-        `### ${s.name}\nScreenshot: ${s.screenshotPath}\nSource: ${
+        `### ${s.name}\nScreenshot: ${
+          s.screenshotPath || '(none — source-only fallback)'
+        }\nSource: ${
           (s.sourcePaths && s.sourcePaths.join(', ')) || '(none captured — source-only fallback)'
         }`
     )
