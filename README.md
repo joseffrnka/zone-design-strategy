@@ -48,33 +48,35 @@ design-strategy-informed brainstorm, then write a design spec and a Claude Desig
 > Companion** for this session — **say yes**. It renders mockups and diagrams that help shape
 > the prototype.
 
-## Use — reviewing an existing prototype
+## Use — auditing an existing prototype
 
 In any project (or any folder), run:
 ```
-/zone-design:design-review
+/zone-design:design-audit
 ```
 
 The screenshot pipeline (Playwright + Chromium) installs itself into the plugin's own directory
 the first time it's needed, wherever that is on your machine — you don't need to find or `cd`
 into it yourself. That install happens once per machine, not once per project.
 
-The skill will ask for a Claude Design project link and the file(s) to review, pull the source,
-render and screenshot every screen it can find, run a blind 4-critic panel against the design
-strategy, then publish a visual-review Artifact and write a remediation prompt you can paste
-back into the same Claude Design project.
+The skill will ask for a Claude Design project link and the file(s) to audit, pull the source,
+render and screenshot every screen it can find, then run a blind checklist-audit panel against
+checklist.design's vendored checklists (Design system + Flows + Web app categories) plus a
+general UX-critique framework. It publishes a visual-audit Artifact and writes a remediation
+prompt you can paste back into the same Claude Design project — a list of every checklist item
+that's missing, partial, or unclear, with a fix for each. There is no score.
 
 ## Updating the design strategy
 
 The design strategy lives in
 `plugins/zone-design/skills/design-spec/references/design-strategy.md`. Edit it, bump the
 `version` in `plugins/zone-design/.claude-plugin/plugin.json`, and PMs pick up the change on
-their next plugin update. `design-review` proposes edits here automatically when its panel finds
-the same miss twice across separate reviews — those still need your approval before they land.
+their next plugin update. `design-audit` proposes edits here automatically when its panel finds
+the same failed checklist item twice across separate audits — those still need your approval before they land.
 
 ## Notes
 - Generated specs/prompts are saved to your own location — never to this repo.
 - Visual identity (color, type, tokens) lives in the Zone design system in Claude Design and
   is intentionally never restated by the skill.
-- `design-review`'s findings log (`plugins/zone-design/skills/design-review/design-review-log.md`)
-  is shared across every prototype it reviews — it lives in this repo, not in your project.
+- `design-audit`'s findings log (`plugins/zone-design/skills/design-audit/design-audit-log.md`)
+  is shared across every prototype it audits — it lives in this repo, not in your project.

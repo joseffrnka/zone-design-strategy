@@ -1,7 +1,7 @@
 {
   "name": "zone-design",
-  "description": "Zone design-strategy layer on superpowers. Turns a feature idea into a Zone design specification and a ready-to-paste Claude Design prompt — and reviews an existing Claude Design prototype against that same strategy.",
-  "version": "0.4.0",
+  "description": "Zone design-strategy layer on superpowers. Turns a feature idea into a Zone design specification and a ready-to-paste Claude Design prompt — and audits an existing Claude Design prototype against design system checklists and UX critique frameworks.",
+  "version": "0.5.0",
   "author": {
     "name": "Josef Frnka",
     "email": "joseffrnka@zoneandco.com"
