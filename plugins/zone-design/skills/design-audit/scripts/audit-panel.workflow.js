@@ -123,6 +123,14 @@ const auditResults = await parallel(
   )
 )
 
+// Bind checklistFile from what we know deterministically, not the agent's round-tripped value —
+// this keeps rank()'s accessibility detection and diffAgainstPriorRun's dedup key stable across
+// runs even if an agent's self-reported filename drifts (drops .md, changes casing, paraphrases).
+// `parallel()` preserves input order, so a straightforward index-based zip works.
+const boundResults = auditResults.map((r, i) =>
+  r ? { ...r, checklistFile: checklistsToAudit[i].filename } : r
+)
+
 function rank(finding) {
   if (finding.checklistFile.includes('accessibility')) return 0
   if (finding.status === 'missing') return 1
@@ -167,7 +175,7 @@ function diffAgainstPriorRun(merged, priorRun) {
   return { stillFailing, newThisRun, fixedSinceLastRun }
 }
 
-const merged = mergeFindings(auditResults)
+const merged = mergeFindings(boundResults)
 const diff = params.priorRun ? diffAgainstPriorRun(merged, params.priorRun) : null
 
 return { selection, auditResults, merged, diff }
