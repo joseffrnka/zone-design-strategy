@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<style>
+  .panel { display: none; }
+  .panel.visible { display: block; }
+</style>
+</head>
+<body>
+  <nav id="rail">
+    <button data-nav="a" class="rail-item active">Section A</button>
+    <button data-nav="b" class="rail-item">Section B</button>
+  </nav>
+  <nav class="panel visible" id="panel-a">
+    <button id="nested">Nested Item</button>
+  </nav>
+  <nav class="panel" id="panel-b">
+    <button id="other">Other Item</button>
+  </nav>
+  <h1 id="title">Section A</h1>
+  <script>
+    function showPanel(id) {
+      document.querySelectorAll('.panel').forEach((p) => p.classList.remove('visible'));
+      document.getElementById(id).classList.add('visible');
+    }
+    document.querySelectorAll('.rail-item').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.rail-item').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        showPanel('panel-' + btn.dataset.nav);
+        document.getElementById('title').textContent = 'Section ' + btn.dataset.nav.toUpperCase();
+      });
+    });
+    document.getElementById('nested').addEventListener('click', () => {
+      document.getElementById('title').textContent = 'Nested Item';
+    });
+    document.getElementById('other').addEventListener('click', () => {
+      document.getElementById('title').textContent = 'Other Item';
+    });
+  </script>
+</body>
+</html>
