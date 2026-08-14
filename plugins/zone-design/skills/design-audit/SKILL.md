@@ -122,13 +122,27 @@ checks) no screenshot can confirm; a delta section (`diff.stillFailing` / `diff.
 `diff.fixedSinceLastRun`) if a prior run was given at intake; a footer. Publish it with the
 `Artifact` tool (favicon: 📋) every run — this is not optional or on-request.
 
+**Per-screen plate layout:** the screenshot is a full-width row at the **top** of the plate, not a
+side column next to the table — a narrow side-by-side image starves the table of width and forces
+horizontal scrolling. The findings table sits below it, spanning the full plate width. Clicking the
+screenshot opens it enlarged in an in-page lightbox (a simple full-viewport overlay, dismissible by
+clicking the backdrop or pressing Escape) — never a new browser tab.
+
+**Findings table columns:** "Checklist" shows the checklist's human-readable name as the primary
+line (e.g. "Kanban board"), with its filename shown secondarily underneath in smaller, muted
+monospace (e.g. `web-app-kanban-board-view.md`) — look up the friendly name from
+`references/checklist-index.md`'s `**Name** \`filename.md\`` entries; for `ux-critique-framework.md`
+(not in that index) just use "UX critique framework" as the friendly name. Give the "Why it
+matters" and "Fix" columns generous width — they carry the actual content a reader needs — and keep
+"Checklist"/"Item"/"Status" narrow, so the table reads without horizontal scrolling at normal plate
+width.
+
 `merged.byScreen` may include an `"all screens"` key — findings the panel judged uniform across
 every screen (e.g. nav consistency, the typography scale). Don't force these into any one screen's
-plate: render them as their own cross-cutting section (same table shape: checklist source, item,
-status, why it matters, fix), placed above the per-screen plates. A screen whose entry has no
-`screenshotPath` (the source-only fallback from step 4) still gets its own plate — just with no
-screenshot, only its failed-items table — consistent with the callout noting it as a source-only
-fallback.
+plate: render them as their own cross-cutting section (same table shape and layout rules above),
+placed above the per-screen plates. A screen whose entry has no `screenshotPath` (the source-only
+fallback from step 4) still gets its own plate — just with no screenshot, only its failed-items
+table — consistent with the callout noting it as a source-only fallback.
 
 Also write `<run-dir>/findings.json`:
 ```json
